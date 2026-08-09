@@ -1,5 +1,5 @@
 name = "cristine-saulon-portfolio"
-main = "src/index-fixed.js"
+main = "src/index.js"
 compatibility_date = "2026-08-08"
 
 [assets]
