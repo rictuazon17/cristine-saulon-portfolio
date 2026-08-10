@@ -1,4 +1,26 @@
-Available for Opportunities
+t" class="mobile-link">Contact</a>
+    <a href="#references" class="mobile-link">References</a>
+    <a href="assets/resume/Mary_Cristine_Saulon_Resume.pdf" download class="mobile-link">Download Resume</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="hero-content">
+      <!-- Profile Photo -->
+      <div class="hero-photo-wrap" id="heroPhotoWrap">
+        <img
+          src="assets/images/cristine-saulon.jpg"
+          alt="Mary Cristine Saulon - IT Support Specialist professional profile photo"
+          class="hero-photo"
+          id="heroPhoto"
+          onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='flex';"
+        >
+        <div class="hero-photo-fallback" id="photoFallback">MCS</div>
+      </div>
+
+      <div class="hero-badge" id="heroBadge">
+        <span class="dot" aria-hidden="true"></span>
+        Available for Opportunities
       </div>
       <p class="hero-greeting" id="heroGreeting">Hi, I am</p>
       <h1 class="hero-name" id="heroName">Mary Cristine <span style="color:var(--accent-light);">Fatima J. Saulon</span></h1>
