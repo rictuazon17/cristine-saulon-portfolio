@@ -1,4 +1,4 @@
-const VERSION = "20260810-profile-design-2";
+const VERSION = "20260810-profile-design-3";
 const REPO = `https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/`;
 const INDEX_SOURCE = `${REPO}index.html?v=${VERSION}`;
 const PHOTO_SOURCE = `${REPO}assets/images/cristine-saulon.jpg.b64?v=${VERSION}`;
@@ -18,6 +18,11 @@ async function getText(url) {
   return response.text();
 }
 
+function injectHeroVisual(html) {
+  const script = `<script>(function(){function mount(){var grid=document.querySelector('.hero-grid');if(!grid)return;var copy=grid.querySelector('.hero-copy');Array.from(grid.children).forEach(function(el){if(el!==copy)el.remove()});var visual=document.createElement('div');visual.className='visual';visual.innerHTML='<div class="orbit" aria-hidden="true"></div><div class="portrait-frame"><span class="cs-outer" aria-hidden="true"></span><img class="portrait" src="/assets/images/cristine-saulon.jpg?v=${VERSION}" alt="Cristine Saulon IT Support Specialist" loading="eager" decoding="async"><div class="glow-floor" aria-hidden="true"></div><div class="particles" aria-hidden="true"><span class="particle p1"></span><span class="particle p2"></span><span class="particle p3"></span><span class="particle p4"></span><span class="particle p5"></span><span class="particle p6"></span><span class="particle p7"></span><span class="particle p8"></span></div></div>';grid.appendChild(visual)}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',mount)}else{mount()}})();</script>`;
+  return html.includes('</body>') ? html.replace('</body>', script + '</body>') : html + script;
+}
+
 export default {
   async fetch(request) {
     const url = new URL(request.url);
@@ -35,7 +40,7 @@ export default {
         });
       }
 
-      const html = await getText(INDEX_SOURCE);
+      const html = injectHeroVisual(await getText(INDEX_SOURCE));
 
       return new Response(html, {
         headers: {
