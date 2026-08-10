@@ -1,5 +1,5 @@
 const HTML_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/index.html";
-const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/assets/images/cristine-saulon-new.jpg.b64";
+const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/2f2f4398f2c86b707f1fe78efa8d8ee1464154dc/assets/images/cristine-saulon.jpg.b64";
 const RESUME_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/a4b01c5d2284d0cbf4a2560fce5086410cdbbf3/src/index.js";
 
 function decodeBase64(value) {
@@ -22,7 +22,7 @@ export default {
         return new Response(decodeBase64(photo), {
           headers: {
             "Content-Type": "image/jpeg",
-            "Cache-Control": "public, max-age=31536000, immutable"
+            "Cache-Control": "no-store"
           }
         });
       }
