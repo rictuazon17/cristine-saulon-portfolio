@@ -1,4 +1,5 @@
-const HTML_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/index.html";
+const REPO = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/";
+const PARTS = Array.from({ length: 8 }, (_, i) => `${REPO}assets/site/index-${String(i + 1).padStart(2, "0")}.part`);
 const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/2f2f4398f2c86b707f1fe78efa8d8ee1464154dc/assets/images/cristine-saulon.jpg.b64";
 const RESUME_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/a4b01c5d2284d0cbf4a2560fce5086410cdbbf3/src/index.js";
 
@@ -8,9 +9,14 @@ function decodeBase64(value) {
 }
 
 async function getText(url) {
-  const response = await fetch(url, { cf: { cacheTtl: 60 } });
-  if (!response.ok) throw new Error("Source unavailable");
+  const response = await fetch(url, { cf: { cacheTtl: 0, cacheEverything: false } });
+  if (!response.ok) throw new Error(`Source unavailable: ${url}`);
   return response.text();
+}
+
+async function getHtml() {
+  const parts = await Promise.all(PARTS.map(getText));
+  return parts.join("");
 }
 
 export default {
@@ -40,7 +46,7 @@ export default {
         });
       }
 
-      const html = await getText(HTML_SOURCE);
+      const html = await getHtml();
       return new Response(html, {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
