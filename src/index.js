@@ -1,5 +1,7 @@
-const REPO = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/";
-const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/assets/images/cristine-saulon.jpg.b64";
+const VERSION = "e98698b";
+const REPO = `https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/`;
+const INDEX_SOURCE = `${REPO}index.html?v=${VERSION}`;
+const PHOTO_SOURCE = `${REPO}assets/images/cristine-saulon.jpg.b64?v=${VERSION}`;
 
 function decodeBase64(value) {
   const clean = value.replace(/\s+/g, "");
@@ -8,7 +10,10 @@ function decodeBase64(value) {
 }
 
 async function getText(url) {
-  const response = await fetch(url, { cf: { cacheTtl: 0, cacheEverything: false } });
+  const response = await fetch(url, {
+    cf: { cacheTtl: 0, cacheEverything: false },
+    headers: { "Cache-Control": "no-cache" }
+  });
   if (!response.ok) throw new Error("source unavailable");
   return response.text();
 }
@@ -23,21 +28,23 @@ export default {
         return new Response(decodeBase64(photo), {
           headers: {
             "Content-Type": "image/jpeg",
-            "Cache-Control": "no-store, no-cache, must-revalidate",
+            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
             "X-Content-Type-Options": "nosniff"
           }
         });
       }
 
-      // Serve the repository's index.html exactly as authored.
-      // The profile-photo neon design is already defined in index.html;
-      // do not inject a second CSS implementation or duplicate .cs-outer.
-      const html = await getText(REPO + "index.html");
+      // Always fetch the exact versioned index.html from GitHub so an older
+      // raw.githubusercontent.com cache cannot serve a stale portfolio.
+      const html = await getText(INDEX_SOURCE);
 
       return new Response(html, {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
-          "Cache-Control": "no-store, no-cache, must-revalidate"
+          "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+          "Pragma": "no-cache",
+          "X-Content-Type-Options": "nosniff"
         }
       });
     } catch (error) {
