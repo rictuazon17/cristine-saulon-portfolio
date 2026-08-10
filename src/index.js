@@ -25,7 +25,15 @@ export default {
           }
         });
       }
-      const html = await getText(REPO + "index.html");
+
+      let html = await getText(REPO + "index.html");
+
+      // Keep the existing Cristine animation system intact while making the hero photo larger.
+      html = html
+        .replace(/width:310px;height:310px/g, "width:360px;height:360px")
+        .replace(/width:300px;height:300px/g, "width:350px;height:350px")
+        .replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-image-fix");
+
       return new Response(html, {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
