@@ -31,10 +31,9 @@ export default {
       let html = await getText(REPO + "index.html");
 
       const neonPhotoCss = `
-<style id="cristine-neon-photo-v3">
-/* Profile photo: intentionally isolated so the rest of the hero layout is unchanged. */
+<style id="cristine-neon-photo-v4">
+/* Only the profile-photo treatment is overridden. Existing hero layout/decorations remain intact. */
 .visual{overflow:visible!important;position:relative!important;isolation:isolate}
-.visual:before,.orbit{display:none!important}
 
 .portrait-frame{
   position:relative!important;
@@ -43,34 +42,36 @@ export default {
   padding:0!important;margin:0!important;
   border:0!important;border-radius:50%!important;
   background:transparent!important;
-  box-shadow:
-    0 0 12px rgba(168,85,247,.22),
-    0 0 30px rgba(59,130,246,.12),
-    0 0 52px rgba(168,85,247,.08)!important;
+  box-shadow:none!important;
   animation:csPhotoFloat 5s ease-in-out infinite!important;
-  z-index:5!important;
+  z-index:2!important;
   overflow:visible!important;
 }
 
-/* Outer ambient halo: 30–40px beyond the photo. */
+/* Middle soft glow + outer ambient glow in one halo layer. */
 .portrait-frame:before{
   content:""!important;
   position:absolute!important;
   inset:-38px!important;
+  width:256px!important;height:256px!important;
+  margin:auto!important;
   border-radius:50%!important;
   pointer-events:none!important;
-  z-index:-2!important;
-  background:radial-gradient(circle,
-    transparent 39%,
-    rgba(168,85,247,.16) 53%,
-    rgba(59,130,246,.10) 67%,
-    transparent 78%)!important;
-  filter:blur(20px)!important;
-  opacity:.70!important;
-  animation:csOuterGlow 5s ease-in-out infinite!important;
+  z-index:-1!important;
+  background:
+    radial-gradient(circle at center,
+      rgba(139,92,246,.40) 0%,
+      rgba(168,85,247,.34) 37%,
+      rgba(168,85,247,.18) 49%,
+      rgba(59,130,246,.09) 61%,
+      transparent 73%)!important;
+  filter:blur(8px)!important;
+  opacity:.80!important;
+  transform:scale(.94)!important;
+  animation:csHaloPulse 4s ease-in-out infinite,csOuterDrift 5s ease-in-out infinite!important;
 }
 
-/* Sharp 2px neon ring. The gradient itself rotates clockwise. */
+/* Sharp 2px rotating neon ring. */
 .portrait-frame:after{
   content:""!important;
   position:absolute!important;
@@ -105,33 +106,29 @@ export default {
   box-shadow:none!important;
 }
 
-/* Middle soft violet halo. */
-.portrait-frame .portrait-glow,
-.portrait-frame .middle-glow{display:none!important}
-.portrait-frame{--midGlow:rgba(139,92,246,.35)}
-.portrait-frame + .glow-floor{z-index:1!important}
-
+/* Reflection: centered directly below the 180px photo with ~20px gap. */
 .glow-floor{
   position:absolute!important;
   left:50%!important;
   top:calc(50% + 110px)!important;
   bottom:auto!important;
-  width:150px!important;height:24px!important;
+  width:170px!important;height:22px!important;
   margin:0!important;
   border-radius:50%!important;
-  transform:translateX(-50%) scaleX(.92)!important;
+  transform:translateX(-50%) scaleX(.90)!important;
   background:radial-gradient(ellipse at center,
     rgba(168,85,247,.50) 0%,
-    rgba(168,85,247,.27) 34%,
-    rgba(59,130,246,.10) 56%,
+    rgba(168,85,247,.28) 34%,
+    rgba(139,92,246,.14) 52%,
     transparent 78%)!important;
   filter:blur(11px)!important;
-  opacity:.48!important;
+  opacity:.44!important;
   animation:csReflection 4s ease-in-out infinite!important;
   pointer-events:none!important;
+  z-index:1!important;
 }
 
-/* Existing particle elements: keep them around the photo, not over the photo. */
+/* Keep the existing orbital decoration, but particles are localized to the photo. */
 .particles{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:300px!important;height:300px!important;inset:auto!important;transform:translate(-50%,-50%)!important;pointer-events:none!important;z-index:7!important}
 .particle{position:absolute!important;width:3px!important;height:3px!important;border-radius:50%!important;background:#a855f7!important;box-shadow:0 0 7px currentColor,0 0 13px currentColor!important;opacity:.72!important}
 .p1{left:17%!important;top:25%!important;color:#a855f7!important;animation:csP1 9s ease-in-out infinite!important}
@@ -146,8 +143,9 @@ export default {
 @keyframes csPhotoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes csRingRotate{to{transform:rotate(360deg)}}
 @keyframes csRingPulse{0%,100%{opacity:.82;filter:brightness(.95) drop-shadow(0 0 4px rgba(168,85,247,.65))}50%{opacity:1;filter:brightness(1.18) drop-shadow(0 0 7px rgba(59,130,246,.78))}}
-@keyframes csOuterGlow{0%,100%{opacity:.48;transform:scale(.96)}50%{opacity:.72;transform:scale(1.04)}}
-@keyframes csReflection{0%,100%{opacity:.32;transform:translateX(-50%) scaleX(.84)}50%{opacity:.55;transform:translateX(-50%) scaleX(1.08)}}
+@keyframes csHaloPulse{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:.86;transform:scale(1.04)}}
+@keyframes csOuterDrift{0%,100%{filter:blur(8px)}50%{filter:blur(11px)}}
+@keyframes csReflection{0%,100%{opacity:.30;transform:translateX(-50%) scaleX(.84)}50%{opacity:.55;transform:translateX(-50%) scaleX(1.08)}}
 @keyframes csP1{0%,100%{transform:translate(0,0);opacity:.35}50%{transform:translate(12px,-10px);opacity:1}}
 @keyframes csP2{0%,100%{transform:translate(0,0);opacity:.45}50%{transform:translate(-14px,10px);opacity:1}}
 @keyframes csP3{0%,100%{transform:translate(0,0);opacity:.35}50%{transform:translate(10px,-13px);opacity:.95}}
@@ -157,14 +155,14 @@ export default {
 @keyframes csP7{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(-9px,12px);opacity:.9}}
 @keyframes csP8{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(10px,-10px);opacity:.85}}
 
-@media(max-width:1050px){.portrait-frame,.portrait{width:180px!important;height:180px!important;min-width:180px!important;min-height:180px!important}.portrait-frame:after{width:184px!important;height:184px!important}.glow-floor{top:calc(50% + 110px)!important}}
-@media(max-width:800px){.portrait-frame,.portrait{width:170px!important;height:170px!important;min-width:170px!important;min-height:170px!important}.portrait-frame:after{width:174px!important;height:174px!important}.glow-floor{top:calc(50% + 104px)!important}.particles{width:280px!important;height:280px!important}}
-@media(max-width:520px){.portrait-frame,.portrait{width:155px!important;height:155px!important;min-width:155px!important;min-height:155px!important}.portrait-frame:after{width:159px!important;height:159px!important}.glow-floor{top:calc(50% + 96px)!important;width:130px!important;height:18px!important}.particles{width:255px!important;height:255px!important}}
+@media(max-width:1050px){.portrait-frame,.portrait{width:180px!important;height:180px!important;min-width:180px!important;min-height:180px!important}.portrait-frame:after{width:184px!important;height:184px!important}.portrait-frame:before{width:256px!important;height:256px!important}.glow-floor{top:calc(50% + 110px)!important}}
+@media(max-width:800px){.portrait-frame,.portrait{width:170px!important;height:170px!important;min-width:170px!important;min-height:170px!important}.portrait-frame:after{width:174px!important;height:174px!important}.portrait-frame:before{width:246px!important;height:246px!important}.glow-floor{top:calc(50% + 104px)!important}.particles{width:280px!important;height:280px!important}}
+@media(max-width:520px){.portrait-frame,.portrait{width:155px!important;height:155px!important;min-width:155px!important;min-height:155px!important}.portrait-frame:after{width:159px!important;height:159px!important}.portrait-frame:before{width:225px!important;height:225px!important}.glow-floor{top:calc(50% + 96px)!important;width:130px!important;height:18px!important}.particles{width:255px!important;height:255px!important}}
 @media(prefers-reduced-motion:reduce){.portrait-frame,.portrait-frame:before,.portrait-frame:after,.glow-floor,.particle{animation:none!important}}
 </style>`;
 
       html = html.replace(/<\/head>/i, neonPhotoCss + "</head>");
-      html = html.replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-neon-photo-v3");
+      html = html.replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-neon-photo-v4");
 
       return new Response(html, {
         headers: {
