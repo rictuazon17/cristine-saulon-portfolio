@@ -22,7 +22,7 @@ export default {
         return new Response(decodeBase64(photo), {
           headers: {
             "Content-Type": "image/jpeg",
-            "Cache-Control": "public, max-age=3600, immutable",
+            "Cache-Control": "no-store, no-cache, must-revalidate",
             "X-Content-Type-Options": "nosniff"
           }
         });
@@ -32,15 +32,16 @@ export default {
 
       const photoFixCss = `
 <style id="cristine-photo-fix">
-/* Keep the supplied portrait undistorted and fully visible. */
+/* The supplied 540x720 portrait is 3:4. Preserve that exact image ratio and pixels; animate only the surrounding frame. */
 .visual { overflow: visible !important; }
 .portrait-frame {
   width: 430px !important;
-  height: 573px !important;
+  height: 573.333px !important;
   aspect-ratio: 3 / 4 !important;
   border-radius: 50% / 42% !important;
   padding: 8px !important;
   overflow: hidden !important;
+  box-sizing: border-box !important;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
   will-change: transform;
@@ -55,13 +56,14 @@ export default {
   min-width: 0 !important;
   min-height: 0 !important;
   border-radius: 50% / 42% !important;
-  object-fit: cover !important;
-  object-position: 50% 50% !important;
+  object-fit: fill !important;
+  object-position: center center !important;
   display: block !important;
-  transform: translateZ(0) !important;
-  -webkit-transform: translateZ(0) !important;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+  filter: none !important;
   image-rendering: auto !important;
 }
 @media (max-width: 1050px) {
@@ -70,10 +72,13 @@ export default {
 @media (max-width: 800px) {
   .portrait-frame { width: 300px !important; height: 400px !important; }
 }
+@media (max-width: 520px) {
+  .portrait-frame { width: 270px !important; height: 360px !important; }
+}
 </style>`;
 
       html = html.replace(/<\/head>/i, photoFixCss + "</head>");
-      html = html.replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-image-fix-3");
+      html = html.replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-photo-final");
 
       return new Response(html, {
         headers: {
