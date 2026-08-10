@@ -1,5 +1,5 @@
 const HTML_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/index.html";
-const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/assets/images/cristine-saulon.jpg.b64";
+const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/assets/images/cristine-saulon-new.jpg.b64";
 const RESUME_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/a4b01c5d2284d0cbf4a2560fce5086410cdbbf3/src/index.js";
 
 function decodeBase64(value) {
@@ -22,7 +22,7 @@ export default {
         return new Response(decodeBase64(photo), {
           headers: {
             "Content-Type": "image/jpeg",
-            "Cache-Control": "public, max-age=300, must-revalidate"
+            "Cache-Control": "public, max-age=31536000, immutable"
           }
         });
       }
@@ -40,9 +40,7 @@ export default {
         });
       }
 
-      let html = await getText(HTML_SOURCE);
-      html = html.replaceAll("assets/images/cristine-saulon.jpg", "assets/images/cristine-saulon.jpg?v=20260810");
-      html = html.replace("</head>", `<style>.photo{width:280px!important;height:280px!important;border-radius:24px!important;object-fit:cover!important;object-position:center!important;display:block!important;margin:0 auto 32px!important;box-shadow:0 20px 60px rgba(0,0,0,.35),0 0 0 4px rgba(96,165,250,.18)!important}.hero{padding-top:60px!important}.photo:hover{transform:scale(1.015);transition:transform .25s ease}</style></head>`);
+      const html = await getText(HTML_SOURCE);
       return new Response(html, {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
