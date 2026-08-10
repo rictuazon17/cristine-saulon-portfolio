@@ -40,7 +40,8 @@ export default {
         });
       }
 
-      const html = await getText(HTML_SOURCE);
+      let html = await getText(HTML_SOURCE);
+      html = html.replaceAll("assets/images/cristine-saulon.jpg", "assets/images/cristine-saulon.jpg?v=20260810");
       return new Response(html, {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
