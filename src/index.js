@@ -1,5 +1,5 @@
 const REPO = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/";
-const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/4a99b7af084c58e849da0f8e1f8671323bbadb1f/assets/images/cristine-saulon-new.jpg.b64";
+const PHOTO_SOURCE = "https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/assets/images/cristine-saulon.jpg.b64";
 
 function decodeBase64(value) {
   const binary = atob(value.trim());
@@ -28,11 +28,11 @@ export default {
 
       let html = await getText(REPO + "index.html");
 
-      // Keep the existing Cristine animation system intact while making the hero photo larger.
+      // Preserve the existing Cristine animation system and enlarge the hero photo.
       html = html
         .replace(/width:310px;height:310px/g, "width:360px;height:360px")
         .replace(/width:300px;height:300px/g, "width:350px;height:350px")
-        .replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-image-fix");
+        .replace(/assets\/images\/cristine-saulon\.jpg\?v=[^\"]*/g, "assets/images/cristine-saulon.jpg?v=20260810-image-fix-2");
 
       return new Response(html, {
         headers: {
