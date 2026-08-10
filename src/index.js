@@ -1,4 +1,4 @@
-const VERSION = "e98698b";
+const VERSION = "20260810-profile-design-2";
 const REPO = `https://raw.githubusercontent.com/rictuazon17/cristine-saulon-portfolio/main/`;
 const INDEX_SOURCE = `${REPO}index.html?v=${VERSION}`;
 const PHOTO_SOURCE = `${REPO}assets/images/cristine-saulon.jpg.b64?v=${VERSION}`;
@@ -35,8 +35,6 @@ export default {
         });
       }
 
-      // Always fetch the exact versioned index.html from GitHub so an older
-      // raw.githubusercontent.com cache cannot serve a stale portfolio.
       const html = await getText(INDEX_SOURCE);
 
       return new Response(html, {
@@ -44,6 +42,7 @@ export default {
           "Content-Type": "text/html; charset=UTF-8",
           "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
           "Pragma": "no-cache",
+          "Expires": "0",
           "X-Content-Type-Options": "nosniff"
         }
       });
